@@ -22,7 +22,7 @@ router.post("/", loginLimiter, async (req, res) => {
     try {
         const {username, password} = req.body;
         if(username === process.env.ADMIN_EMAIL) {
-            const isPasswordValid = await bcrypt.compare(password, process.env.ADMIN_PASSWORD);
+            const isPasswordValid = password === process.env.ADMIN_PASSWORD;
             if (isPasswordValid) {
                 const token = jwt.sign(
                     {username, role: 'admin'}, 
