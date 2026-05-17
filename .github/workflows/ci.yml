@@ -1,0 +1,55 @@
+name: BookMern CI Pipeline
+
+on:
+  push:
+    branches: [ "main", "master" ]
+  pull_request:
+    branches: [ "main", "master" ]
+
+jobs:
+  build-and-test-backend:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./Backend
+
+    steps:
+    - name: Checkout Code
+      uses: actions/checkout@v4
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18.x'
+        cache: 'npm'
+        cache-dependency-path: './Backend/package-lock.json'
+
+    - name: Install Backend Dependencies
+      run: npm ci
+
+    # Uncomment this if you add backend tests later
+    # - name: Run Backend Tests
+    #   run: npm test
+
+  build-frontend:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./Frontent/my-project
+
+    steps:
+    - name: Checkout Code
+      uses: actions/checkout@v4
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18.x'
+        cache: 'npm'
+        cache-dependency-path: './Frontent/my-project/package-lock.json'
+
+    - name: Install Frontend Dependencies
+      run: npm ci
+
+    - name: Build Frontend (Vite)
+      run: npm run build
